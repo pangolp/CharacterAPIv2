@@ -15,6 +15,8 @@ class PlanetSerializer(serializers.ModelSerializer):
 
 class CharacterSerializer(serializers.ModelSerializer):
 
+	homeworld = PlanetSerializer()
+
 	class Meta:
 		fields = (
 			'name',
@@ -36,8 +38,13 @@ class CharacterSerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
 
 	class Meta:
+
+		extra_kwargs = {
+			'character_id': {'read_only': True}
+		}
+
 		fields = (
 			'character_id',
-			'score'
+			'score',
 		)
 		model = Rating
