@@ -1,5 +1,5 @@
 from django.db import models
-from .validators import score_validation
+from .validators import score_validation, character_id_validation
 
 
 class Planet(models.Model):
@@ -36,5 +36,5 @@ class Character(models.Model):
 
 
 class Rating(models.Model):
-	character_id = models.PositiveIntegerField('ID Character', help_text='ex. 10')
+	character_id = models.PositiveIntegerField('ID Character', help_text='ex. 10', validators=[character_id_validation])
 	score = models.PositiveSmallIntegerField(help_text='ex. 3', validators=[score_validation])
