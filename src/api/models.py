@@ -10,9 +10,6 @@ class Planet(models.Model):
 	def __str__(self):
 		return self.name
 
-	class Meta:
-		abstract = True
-
 
 class Character(models.Model):
 	name = models.CharField(max_length=50, help_text='ex. Luke Skywalker')
@@ -30,9 +27,6 @@ class Character(models.Model):
 
 	def __str__(self):
 		return self.name
-
-	class Meta:
-		abstract = True
 
 
 class Rating(models.Model):
