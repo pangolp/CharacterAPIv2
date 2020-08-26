@@ -1,4 +1,5 @@
 import requests
+from django.db.models import Avg
 from django.http import JsonResponse
 from rest_framework import viewsets
 from .models import Character, Rating
@@ -21,6 +22,27 @@ def getCharacterById(request, id):
 	for i in responsePlanet['residents']:
 		residents = residents + 1
 
+	# Devuelve el valor máximo, caso contrario, devuelve 0.
+	character_max_rating = Rating.objects.filter(character_id=id).order_by('score').last()
+
+	if character_max_rating:
+		score = character_max_rating.score
+	else:
+		score = 0
+
+	# Calcula el promedio del campo score para el character solicitado.
+	character_average_rating = Rating.objects.filter(character_id=id).aggregate(Avg('score'))
+
+	urlSpecie = response['species']
+	if urlSpecie:
+		urlSpecie = str(urlSpecie)
+		urlID = urlSpecie.split('/')[5]
+		responseSpecie = requests.get("https://swapi.dev/api/species/" + urlID + "/")
+		responseSpecie = responseSpecie.json()
+		specie = responseSpecie['name']
+	else:
+		specie = []
+
 	response = JsonResponse(
 		{
 			'name': character.name,
@@ -36,9 +58,9 @@ def getCharacterById(request, id):
 				'population': responsePlanet['population'],
 				'known_residents_count': residents,
 			},
-			'species_name': '',
-			'average_rating': 4.5,
-			'max_rating': 5,
+			'species_name': specie,
+			'average_rating': character_average_rating['score__avg'],
+			'max_rating': score,
 		}
 	)
 	return response
