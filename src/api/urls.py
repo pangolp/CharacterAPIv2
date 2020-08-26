@@ -1,14 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 from .views import (
-	getCharacterById,
-	RatingViewSet,
+	RatingCreate,
+	CharacterView,
 )
 
-router = routers.DefaultRouter()
-router.register('ratings', RatingViewSet)
-
 urlpatterns = [
-	path('', include(router.urls)),
-    path('character/<int:id>/', getCharacterById),
+    path('character/<int:id>/', CharacterView.as_view()),
+    path('character/<int:id>/rating/', RatingCreate.as_view()),
 ]
