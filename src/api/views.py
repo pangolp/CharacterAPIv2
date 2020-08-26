@@ -1,6 +1,8 @@
 import requests
 from django.http import JsonResponse
-from .models import Character
+from rest_framework import viewsets
+from .models import Character, Rating
+from .serializers import RatingSerializer
 
 
 def getCharacterById(request, id):
@@ -40,3 +42,8 @@ def getCharacterById(request, id):
 		}
 	)
 	return response
+
+
+class RatingViewSet(viewsets.ModelViewSet):
+	queryset = Rating.objects.all()
+	serializer_class = RatingSerializer
